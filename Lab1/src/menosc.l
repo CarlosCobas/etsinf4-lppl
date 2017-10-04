@@ -30,14 +30,30 @@ identificador   {letra}({letra}|{digito}|\_)*
 "true"          { show("Reserved word: "); }
 "false"         { show("Reserved word: "); }
 
+"=="            {}
+"!="            {}
+"+="            {}
+"-="            {}
+"*="            {}
+"/="            {}
+"++"            {}
+"--"            {}
+"&&"            {}
+"||"            {}
+
 "="             { show("operator:      "); }
 "+"             { show("operator:      "); }
 "-"             { show("operator:      "); }
 "*"             { show("operator:      "); }
 "/"             { show("operator:      "); }
 "%"             { show("operator:      "); }
+"!"             { show("operator:      "); }
 "("             { show("delimiter:     "); }
 ")"             { show("delimiter:     "); }
+"{"             {}
+"}"             {}
+"["             {}
+"]"             {}
 ";"             { show("delimiter:     "); }
 
 {constante}     { show("cte:           "); }

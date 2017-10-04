@@ -1,70 +1,62 @@
 %{
 #include <stdio.h>
+#include "header.h"
 %}
 
 %option yylineno
 
-delimitador     [ \t\n]
+delimitador     [ \t\n]+
 comentario      \/\/.*
 letra           [a-zA-Z]
 digito          [0-9]
 constante       {digito}+(\.{digito}+)?
-identificador   {letra}({letra}|{digito}|\_)*
+identificador   {letra}({letra}|{digito}|_)*
 
 %%
 
 {delimitador}   {  }
 {comentario}    {  }
 
-"read"          { show("Reserved word: "); }
-"print"         { show("Reserved word: "); }
-"if"            { show("Reserved word: "); }
-"else"          { show("Reserved word: "); }
-"elseif"        { show("Reserved word: "); }
-"while"         { show("Reserved word: "); }
-"do"            { show("Reserved word: "); }
-"int"           { show("Reserved word: "); }
-"bool"          { show("Reserved word: "); }
-"true"          { show("Reserved word: "); }
-"false"         { show("Reserved word: "); }
+"read"          { return READ_;         }
+"print"         { return PRINT_;        }
+"if"            { return IF_;           }
+"else"          { return ELSE_;         }
+"elseif"        { return ELSEIF_;       }
+"while"         { return WHILE_;        }
+"do"            { return DO_;           }
+"int"           { return INT_;          }
+"bool"          { return BOOL_;         }
+"true"          { return TRUE_;         }
+"false"         { return FALSE_;        }
 
-"=="            {}
-"!="            {}
-"+="            {}
-"-="            {}
-"*="            {}
-"/="            {}
-"++"            {}
-"--"            {}
-"&&"            {}
-"||"            {}
+"=="            { return OPIGUAL_;      }
+"!="            { return OPNOTIGUAL_;   }
+"+="            { return MASIGUAL_;     }
+"-="            { return MENOSIGUAL_;   }
+"*="            { return PORIGUAL_;     }
+"/="            { return DIVIGUAL_;     }
+"++"            { return OPINCREMENTO_; }
+"--"            { return OPDECREMENTO_; }
+"&&"            { return OPAND_;        }
+"||"            { return OPOR_;         }
+"="             { return IGUAL_;        }
+"+"             { return OPSUMA_;       }
+"-"             { return OPRESTA_;      }
+"*"             { return OPMULT_;       }
+"/"             { return OPDIV_;        }
+"%"             { return OPMOD_;        }
+"!"             { return OPNOT_;        }
+"("             { return PARENTESIS1_;  }
+")"             { return PARENTESIS2_;  }
+"{"             { return LLAVE1_;       }
+"}"             { return LLAVE2_;       }
+"["             { return CORCHETE1_;    }
+"]"             { return CORCHETE2_;    }
+";"             { return SEMICOLON_;    }
 
-"="             { show("operator:      "); }
-"+"             { show("operator:      "); }
-"-"             { show("operator:      "); }
-"*"             { show("operator:      "); }
-"/"             { show("operator:      "); }
-"%"             { show("operator:      "); }
-"!"             { show("operator:      "); }
-"("             { show("delimiter:     "); }
-")"             { show("delimiter:     "); }
-"{"             {}
-"}"             {}
-"["             {}
-"]"             {}
-";"             { show("delimiter:     "); }
-
-{constante}     { show("cte:           "); }
-{identificador} { show("id:            "); }
-.               { show("invalid char:  "); }
+{constante}     { return CTE_;          }
+{identificador} { return ID_;           }
+.               { printf("Error!\n");   }
 
 %%
 
-void show(char* text) {
-    printf("%3d-%s %s\n", yylineno, text, yytext);
-}
-
-int main () {
-    printf("%2d.- ", yylineno);
-    yylex();
-}

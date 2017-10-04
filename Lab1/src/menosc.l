@@ -1,7 +1,5 @@
 %{
 #include <stdio.h>
-void show(char* text);
-extern FILE *yyin;
 %}
 
 %option yylineno
@@ -10,7 +8,7 @@ delimitador     [ \t\n]
 comentario      \/\/.*
 letra           [a-zA-Z]
 digito          [0-9]
-constante       {digito}+
+constante       {digito}+(\.{digito}+)?
 identificador   {letra}({letra}|{digito}|\_)*
 
 %%

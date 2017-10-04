@@ -4,15 +4,14 @@
     extern FILE *yyfile; // TODO: check
 %}
 
-%token OPSUMA_  OPRESTA_    OPMULT_     OPDIV_      OPMOD_
-%token CMAYOR_  CMENOR_     CMAYORIG_   CMENORIG_   CIGUAL_     CDESIGUAL_
-%token BOOLAND_ BOOLOR_     BOOLNOT_
+%token OPSUMA_ OPRESTA_ OPMULT_ OPDIV_ OPMOD_ OPAND_ OPOR_ OPNOT_
+%token COMPMAYOR_ COMPMENOR_ COMPMAYORIG_ COMPMENORIG_ COMPIGUAL_ COMPNOTIGUAL_
 %token IGUAL_   MASIGUAL_   MENOSIGUAL_ PORIGUAL_   DIVIGUAL_
 %token WHILE_   IF_         ELSEIF_     ELSE_       DO_
 %token INT_     BOOL_
 %token READ_    PRINT_
 %token CTE_     ID_     TRUE_   FALSE_
-%token LLAVE1_  LLAVE2_ BRACK1_ BRACK2_ SQUARE1_ SQUARE2_ SEMIC_
+%token LLAVE1_  LLAVE2_ PARENTESIS1_ PARENTESIS2_ CORCHETE1_ CORCHETE2_ SEMICOLON_
 %token EPSILON_
 
 %%
@@ -22,8 +21,8 @@ secuencia_sentencias: sentencia
                     | secuencia_sentencias sentencia;
 sentencia: declaracion
          | instruccion;
-declaracion: tipo_simple ID_ SEMIC_
-           | tipo_simple ID_ SQUARE1_ CTE_ SQUARE2_ SEMIC_;
+declaracion: tipo_simple ID_ SEMICOLON_
+           | tipo_simple ID_ CORCHETE1_ CTE_ CORCHETE2_ SEMICOLON_;
 tipo_simple: INT_
            | BOOL_;
 instruccion: LLAVE1_ lista_instrucciones LLAVE2_
@@ -33,18 +32,18 @@ instruccion: LLAVE1_ lista_instrucciones LLAVE2_
            | instruccion_iteracion;
 lista_instrucciones: lista_instrucciones instruccion
                    | EPSILON_;
-instruccion_expresion: expresion SEMIC_
-                     | SEMIC_;
-instruccion_entrada_salida: READ_  BRACK1_ ID_       BRACK2_ SEMIC_
-                          | PRINT_ BRACK1_ expresion BRACK2_ SEMIC_;
-instruccion_seleccion: IF_ BRACK1_ expresion BRACK2_ instruccion resto_if;
-resto_if: ELSEIF_ BRACK1_ expresion BRACK2_ instruccion resto_if
+instruccion_expresion: expresion SEMICOLON_
+                     | SEMICOLON_;
+instruccion_entrada_salida: READ_  PARENTESIS1_ ID_       PARENTESIS2_ SEMICOLON_
+                          | PRINT_ PARENTESIS1_ expresion PARENTESIS2_ SEMICOLON_;
+instruccion_seleccion: IF_ PARENTESIS1_ expresion PARENTESIS2_ instruccion resto_if;
+resto_if: ELSEIF_ PARENTESIS1_ expresion PARENTESIS2_ instruccion resto_if
         | ELSE_ instruccion;
-instruccion_iteracion: WHILE_ BRACK1_ expresion BRACK2_ instruccion
-                     | DO_ instruccion WHILE_ BRACK1_ expresion BRACK2_;
+instruccion_iteracion: WHILE_ PARENTESIS1_ expresion PARENTESIS2_ instruccion
+                     | DO_ instruccion WHILE_ PARENTESIS1_ expresion PARENTESIS2_;
 expresion: expresion_logica
-         | ID_                             operador_asignacion expresion
-         | ID_ SQUARE1_ expresion SQUARE2_ operador_asignacion expresion;
+         | ID_                                 operador_asignacion expresion
+         | ID_ CORCHETE1_ expresion CORCHETE2_ operador_asignacion expresion;
 expresion_logica: expresion_igualdad
                 | expresion_logica operador_logico expresion_igualdad;
 expresion_igualdad: expresion_relacional
@@ -58,9 +57,9 @@ expresion_multiplicativa: expresion_unaria
 expresion_unaria: expresion_sufija
                 | operador_unario expresion_unaria
                 | operador_incremento ID_;
-expresion_sufija: BRACK1_ expresion BRACK2_
+expresion_sufija: PARENTESIS1_ expresion PARENTESIS2_
                 | ID_ operador_incremento
-                | ID_ SQUARE1_ expresion SQUARE2_
+                | ID_ CORCHETE1_ expresion CORCHETE2_
                 | ID_
                 | CTE_
                 | TRUE_
@@ -71,14 +70,14 @@ operador_asignacion: IGUAL_
                    | MENOSIGUAL_
                    | PORIGUAL_
                    | DIVIGUAL_;
-operador_logico: BOOLAND_
-               | BOOLOR_;
-operador_igualdad: CIGUAL_
-                 | CDESIGUAL_;
-operador_relacional: CMAYOR_
-                   | CMENOR_
-                   | CMAYORIG_
-                   | CMENORIG_;
+operador_logico: OPAND_
+               | OPOR_;
+operador_igualdad: COMPIGUAL_
+                 | COMPNOTIGUAL_;
+operador_relacional: COMPMAYOR_
+                   | COMPMENOR_
+                   | COMPMAYORIG_
+                   | COMPMENORIG_;
 operador_aditivo: OPSUMA_
                 | OPRESTA_ CTE_;
 operador_multiplicativo: OPMULT_
@@ -86,7 +85,7 @@ operador_multiplicativo: OPMULT_
                        | OPMOD_;
 operador_unario: OPSUMA_
                | OPRESTA_
-               | BOOLNOT_;
+               | OPNOT_;
 operador_incremento: OPINCREMENTO_
                    | OPDECREMENTO_;
 

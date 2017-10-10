@@ -1,5 +1,6 @@
 %{
     #include <stdio.h>
+    #include "header.h"
     extern int yylineno;
     extern FILE *yyfile; // TODO: check
 %}
@@ -7,7 +8,7 @@
 %token OPSUMA_ OPRESTA_ OPMULT_ OPDIV_ OPMOD_ OPAND_ OPOR_ OPNOT_ OPINCREMENTO_ OPDECREMENTO_
 %token COMPMAYOR_ COMPMENOR_ COMPMAYORIG_ COMPMENORIG_ COMPIGUAL_ COMPNOTIGUAL_
 %token IGUAL_   MASIGUAL_   MENOSIGUAL_ PORIGUAL_   DIVIGUAL_
-%token WHILE_   IF_         ELSEIF_     ELSE_       DO_
+%token WHILE_   DO_   IF_   ELSEIF_     ELSE_
 %token INT_     BOOL_
 %token READ_    PRINT_
 %token CTE_     ID_     TRUE_   FALSE_

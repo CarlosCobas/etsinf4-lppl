@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include "header.h"
+#include <asin.h>
 %}
 
 %option yylineno

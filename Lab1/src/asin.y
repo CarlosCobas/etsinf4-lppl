@@ -17,6 +17,7 @@
 programa
     : LLAVE1_ secuencia_sentencias LLAVE2_
     ;
+
 secuencia_sentencias
     : sentencia
     | secuencia_sentencias sentencia
@@ -148,7 +149,7 @@ operador_relacional
 
 operador_aditivo
     : OPSUMA_
-    | OPRESTA_ CTE_
+    | OPRESTA_
     ;
 
 operador_multiplicativo

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "header.h"
 #include <asin.h>
+#define retornar(a) if (verbosidad) printf("%3d %s\n", yylineno, yytext); return(a);
 %}
 
 %option yylineno
@@ -18,46 +19,50 @@ identificador   {letra}({letra}|{digito}|_)*
 {delimitador}   {  }
 {comentario}    {  }
 
-"read"          { return READ_;         }
-"print"         { return PRINT_;        }
-"if"            { return IF_;           }
-"else"          { return ELSE_;         }
-"elseif"        { return ELSEIF_;       }
-"while"         { return WHILE_;        }
-"do"            { return DO_;           }
-"int"           { return INT_;          }
-"bool"          { return BOOL_;         }
-"true"          { return TRUE_;         }
-"false"         { return FALSE_;        }
+"read"          { retornar(READ_);         }
+"print"         { retornar(PRINT_);        }
+"if"            { retornar(IF_);           }
+"else"          { retornar(ELSE_);         }
+"elseif"        { retornar(ELSEIF_);       }
+"while"         { retornar(WHILE_);        }
+"do"            { retornar(DO_);           }
+"int"           { retornar(INT_);          }
+"bool"          { retornar(BOOL_);         }
+"true"          { retornar(TRUE_);         }
+"false"         { retornar(FALSE_);        }
 
-"=="            { return OPIGUAL_;      }
-"!="            { return OPNOTIGUAL_;   }
-"+="            { return MASIGUAL_;     }
-"-="            { return MENOSIGUAL_;   }
-"*="            { return PORIGUAL_;     }
-"/="            { return DIVIGUAL_;     }
-"++"            { return OPINCREMENTO_; }
-"--"            { return OPDECREMENTO_; }
-"&&"            { return OPAND_;        }
-"||"            { return OPOR_;         }
-"="             { return IGUAL_;        }
-"+"             { return OPSUMA_;       }
-"-"             { return OPRESTA_;      }
-"*"             { return OPMULT_;       }
-"/"             { return OPDIV_;        }
-"%"             { return OPMOD_;        }
-"!"             { return OPNOT_;        }
-"("             { return PARENTESIS1_;  }
-")"             { return PARENTESIS2_;  }
-"{"             { return LLAVE1_;       }
-"}"             { return LLAVE2_;       }
-"["             { return CORCHETE1_;    }
-"]"             { return CORCHETE2_;    }
-";"             { return SEMICOLON_;    }
+"=="            { retornar(OPIGUAL_);      }
+"!="            { retornar(OPNOTIGUAL_);   }
+"+="            { retornar(MASIGUAL_);     }
+"-="            { retornar(MENOSIGUAL_);   }
+"*="            { retornar(PORIGUAL_);     }
+"/="            { retornar(DIVIGUAL_);     }
+"++"            { retornar(OPINCREMENTO_); }
+"--"            { retornar(OPDECREMENTO_); }
+"&&"            { retornar(OPAND_);        }
+"||"            { retornar(OPOR_);         }
+"<"             { retornar(COMPMENOR_);    }
+">"             { retornar(COMPMAYOR_);    }
+"<="            { retornar(COMPMENORIG_);  }
+">="            { retornar(COMPMAYORIG_);  }
+"="             { retornar(IGUAL_);        }
+"+"             { retornar(OPSUMA_);       }
+"-"             { retornar(OPRESTA_);      }
+"*"             { retornar(OPMULT_);       }
+"/"             { retornar(OPDIV_);        }
+"%"             { retornar(OPMOD_);        }
+"!"             { retornar(OPNOT_);        }
+"("             { retornar(PARENTESIS1_);  }
+")"             { retornar(PARENTESIS2_);  }
+"{"             { retornar(LLAVE1_);       }
+"}"             { retornar(LLAVE2_);       }
+"["             { retornar(CORCHETE1_);    }
+"]"             { retornar(CORCHETE2_);    }
+";"             { retornar(SEMICOLON_);    }
 
-{constante}     { return CTE_;          }
-{identificador} { return ID_;           }
-.               { printf("Error!\n");   }
+{constante}     { retornar(CTE_);          }
+{identificador} { retornar(ID_);           }
+.               { printf("Error [%d]: %s\n", yylineno, yytext);   }
 
 %%
 

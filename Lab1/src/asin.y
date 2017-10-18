@@ -1,8 +1,6 @@
 %{
     #include <stdio.h>
     #include "header.h"
-    extern int yylineno;
-    extern FILE *yyfile;
 %}
 
 %token OPSUMA_ OPRESTA_ OPMULT_ OPDIV_ OPMOD_ OPAND_ OPOR_ OPNOT_ OPINCREMENTO_ OPDECREMENTO_

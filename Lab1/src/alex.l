@@ -1,8 +1,8 @@
 %{
 #include <stdio.h>
 #include "header.h"
-#include <asin.h>
-#define retornar(a) if (verbosidad) printf("%3d %s\n", yylineno, yytext); return(a);
+#include "asin.h"
+#define retornar(a) { if (verbosidad) ECHO; return(a); }
 %}
 
 %option yylineno
@@ -16,8 +16,8 @@ identificador   {letra}({letra}|{digito}|_)*
 
 %%
 
-{delimitador}   {  }
-{comentario}    {  }
+{delimitador}   { if (verbosidad) ECHO;    }
+{comentario}    { if (verbosidad) ECHO;    }
 
 "read"          { retornar(READ_);         }
 "print"         { retornar(PRINT_);        }

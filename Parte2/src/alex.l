@@ -11,7 +11,7 @@ delimitador     [ \t\n]+
 comentario      \/\/.*
 letra           [a-zA-Z]
 digito          [0-9]
-constante       {digito}+(\.{digito}+)?
+constante       ({digito}+(\.{digito}*)?|\.{digito}+)
 identificador   {letra}({letra}|{digito}|_)*
 
 %%

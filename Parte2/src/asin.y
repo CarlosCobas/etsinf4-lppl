@@ -1,5 +1,6 @@
 %{
     #include <stdio.h>
+    #include "libtds.h"
     #include "header.h"
 %}
 
@@ -8,20 +9,19 @@
     int cent;
 }
 
-%type <cent> value
-%type <cent> tipo
 
 %token OPSUMA_ OPRESTA_ OPMULT_ OPDIV_ OPMOD_ OPAND_ OPOR_ OPNOT_ OPINCREMENTO_ OPDECREMENTO_
 %token COMPMAYOR_ COMPMENOR_ COMPMAYORIG_ COMPMENORIG_ OPIGUAL_ OPNOTIGUAL_
 %token IGUAL_   MASIGUAL_   MENOSIGUAL_ PORIGUAL_   DIVIGUAL_
 %token WHILE_   DO_   IF_   ELSEIF_     ELSE_
-%token <tipo> INT_     BOOL_
+%token <cent> INT_     BOOL_
 %token READ_    PRINT_
-%token <value> CTE_
+%token <cent> CTE_
 %token <ident> ID_
 %token TRUE_   FALSE_
 %token LLAVE1_  LLAVE2_ PARENTESIS1_ PARENTESIS2_ CORCHETE1_ CORCHETE2_ SEMICOLON_
 
+%type <cent> tipo_simple
 %%
 
 programa
@@ -39,13 +39,29 @@ sentencia
     ;
 
 declaracion
-    : tipo_simple ID_ SEMICOLON_
-    | tipo_simple ID_ CORCHETE1_ CTE_ CORCHETE2_ SEMICOLON_
+    : tipo_simple ID_ SEMICOLON_ {
+        if (!insertarTDS($2, $1, dvar, -1)) {
+            yyerror("Identificador repetido");
+        } else {
+            dvar += TALLA_TIPO_SIMPLE;
+        }
+    }
+    | tipo_simple ID_ CORCHETE1_ CTE_ CORCHETE2_ SEMICOLON_ {
+        int numelem = $4; int ref;
+        if (numelem <= 0) {
+            yyerror("Talla inapropiada del array");
+            numelem = 0;
+        }
+        ref = insertaTDArray($1, numelem);
+        if (!insertarTDS($2, T_ARRAY, dvar, ref))
+            yyerror("Identificador repetido");
+        else dvar += numelem * TALLA_TIPO_SIMPLE;
+    }
     ;
 
 tipo_simple
-    : INT_ {}
-    | BOOL_
+    : INT_   { $$ = T_ENTERO; }
+    | BOOL_  { $$ = T_LOGICO; }
     ;
 
 instruccion

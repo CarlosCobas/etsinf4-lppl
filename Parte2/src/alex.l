@@ -62,7 +62,7 @@ identificador   {letra}({letra}|{digito}|_)*
 
 {constante}     { yylval.cent  = atoi(yytext);   retornar(CTE_); }
 {identificador} { yylval.ident = strdup(yytext); retornar(ID_);  }
-.               { printf("Error [%d]: %s\n", yylineno, yytext);  }
+.               { ECHO; yyerror("Invalid token"); }
 
 %%
 

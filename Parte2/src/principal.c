@@ -17,25 +17,27 @@ void yyerror(const char * msg)
   fprintf(stdout, "\nError at line %d: %s\n", yylineno, msg);
 }
 /*****************************************************************************/
-int main (int argc, char **argv) 
+int main (int argc, char **argv)
 /* Gestiona la linea de comandos e invoca al analizador sintactico-semantico.*/
 { int i, n = 0;
 
-  for (i=0; i<argc; ++i) { 
+  for (i=0; i<argc; ++i) {
     if (strcmp(argv[i], "-v")==0) { verbosidad = TRUE; n++; }
     else if (strcmp(argv[i], "-t")==0) { verTDS = TRUE; n++; }
   }
   --argc; n++;
   if (argc == n) {
     if ((yyin = fopen (argv[argc], "r")) == NULL)
-      fprintf (stderr, "Fichero no valido %s\n", argv[argc]);      
-    else {        
+      fprintf (stderr, "Fichero no valido %s\n", argv[argc]);
+    else {
       if (verbosidad == TRUE) fprintf(stdout,"%3d.- ", yylineno);
       yyparse ();
-      if (numErrores > 0) 
+      if (numErrores > 0)
         fprintf(stdout,"\nNumero de errores:      %d\n", numErrores);
-    }   
+      if (verTDS == TRUE)
+        mostrarTDS();
+    }
   }
   else fprintf (stderr, "Uso: cmc [-v] [-t] fichero\n");
-} 
+}
 /*****************************************************************************/

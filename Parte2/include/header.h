@@ -42,11 +42,14 @@
 /* Operador incremento */
 #define OP_INC 0
 #define OP_DEC 1
-
+/************************************************************ Error messages */
+#define E_TYPE_MISMATCH "Los tipos no coinciden"
+#define E_UNDECLARED    "Variable no declarada"
 /************************************************ Struct para las expresions */
-struct exp {
+typedef struct exp {
     int valor;
     int tipo;
+    int valid;
 } EXP;
 /************************************* Variables externas definidas en el AL */
 extern FILE *yyin;

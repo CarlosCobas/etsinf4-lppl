@@ -48,18 +48,18 @@ sentencia
 declaracion
     : tipo_simple ID_ SEMICOLON_
         { if (!insertarTDS($2, $1, dvar, -1))
-            yyerror("Identificador repetido");
+            yyerror(E_REPEATED_DECLARATION);
         else
             dvar += TALLA_TIPO_SIMPLE; }
     | tipo_simple ID_ CORCHETE1_ CTE_ CORCHETE2_ SEMICOLON_
         { int numelem = $4; int ref;
         if (numelem <= 0) {
-            yyerror("Talla inapropiada del array");
+            yyerror(E_ARRAY_SIZE_INVALID);
             numelem = 0;
         }
         ref = insertaTDArray($1, numelem);
         if (!insertarTDS($2, T_ARRAY, dvar, ref))
-            yyerror("Identificador repetido");
+            yyerror(E_REPEATED_DECLARATION);
         else
             dvar += numelem * TALLA_TIPO_SIMPLE; }
     ;
@@ -93,25 +93,23 @@ instruccion_entrada_salida
         if (simb.tipo == T_ERROR) {
             yyerror(E_UNDECLARED);
         } else if (simb.tipo != T_ENTERO) {
-            yyerror("La variable debe ser entera");
+            yyerror("read espera una variable entera");
         } }
     | PRINT_ PARENTESIS1_ expresion PARENTESIS2_ SEMICOLON_
         { if ($3.tipo != T_ENTERO) {
-            yyerror("La variable debe ser entera");
+            yyerror("print espera una variable entera");
         } }
     ;
 
 instruccion_seleccion
     : IF_ PARENTESIS1_ expresion PARENTESIS2_
-        { if ($3.tipo != T_ERROR && $3.tipo != T_LOGICO)
-            yyerror("La expresion debe ser booleana"); }
+        { if ($3.tipo != T_ERROR && $3.tipo != T_LOGICO) yyerror(E_IF_LOGICAL); }
         instruccion resto_if
     ;
 
 resto_if
     : ELSEIF_ PARENTESIS1_ expresion PARENTESIS2_
-        { if ($3.tipo != T_ERROR && $3.tipo != T_LOGICO)
-            yyerror("La expresion debe ser booleana"); }
+        { if ($3.tipo != T_ERROR && $3.tipo != T_LOGICO) yyerror(E_IF_LOGICAL); }
         instruccion resto_if
     | ELSE_ instruccion
     ;
@@ -119,11 +117,11 @@ resto_if
 instruccion_iteracion
     : WHILE_ PARENTESIS1_ expresion PARENTESIS2_
         { if ($3.tipo != T_ERROR && $3.tipo != T_LOGICO)
-            yyerror("La expresion debe ser booleana"); }
+            yyerror(E_WHILE_LOGICAL); }
         instruccion
     | DO_ instruccion WHILE_ PARENTESIS1_ expresion PARENTESIS2_
         { if ($5.tipo != T_ERROR && $5.tipo != T_LOGICO)
-            yyerror("La expresion debe ser booleana"); }
+            yyerror(E_WHILE_LOGICAL); }
     ;
 
 expresion
@@ -137,9 +135,9 @@ expresion
             if (simb.tipo == T_ERROR) {
                 yyerror(E_UNDECLARED);
             } else if (simb.tipo == T_ARRAY) {
-                yyerror("Acceso incorrecto a array");
+                yyerror(E_ARRAY_WO_INDEX);
             } else if (simb.tipo != $3.tipo) {
-                yyerror("Tipos no coinciden XX");
+                yyerror(E_TYPES_ASIGNACION);
             } else {
                 $$.tipo = simb.tipo;
                 $$.valid = FALSE;
@@ -152,15 +150,15 @@ expresion
             if (simb.tipo == T_ERROR) {
                 yyerror(E_UNDECLARED);
             } else if (simb.tipo != T_ARRAY) {
-                yyerror("El identificador no corresponde a un array");
+                yyerror(E_VAR_WITH_INDEX);
             } else if ($3.tipo != T_ENTERO) {
-                yyerror("El indice debe ser un entero");
+                yyerror(E_ARRAY_INDEX_TYPE);
             } else {
                 DIM dim = obtenerInfoArray(simb.ref);
                 if (dim.telem != $6.tipo) {
-                    yyerror("Tipos no coinciden");
+                    yyerror(E_TYPES_ASIGNACION);
                 } else if ($3.valid == TRUE && ($3.valor < 0 || $3.valor >= dim.nelem)) {
-                    yyerror("Indice invalido");
+                    yyerror(E_ARRAY_INDEX_INVALID);
                 } else {
                     $$.tipo = dim.telem;
                     $$.valid = FALSE;
@@ -175,7 +173,7 @@ expresion_logica
         { $$.tipo = T_ERROR;
         if ($1.tipo != T_ERROR && $3.tipo != T_ERROR) {
             if ($1.tipo != $3.tipo) {
-                yyerror("Tipos no coinciden");
+                yyerror(E_TYPES_LOGICA);
             } else if ($1.tipo != T_LOGICO) {
                 yyerror("Operacion logica invalida para no booleanos");
             } else {
@@ -204,9 +202,9 @@ expresion_igualdad
         { $$.tipo = T_ERROR;
         if ($1.tipo != T_ERROR && $3.tipo != T_ERROR) {
             if ($1.tipo != $3.tipo) {
-                yyerror("Tipos no coinciden");
+                yyerror("Tipos no coinciden en operacion de igualdad");
             } else if ($1.tipo == T_ARRAY) {
-                yyerror("Tipo array incorrecto");
+                yyerror("Operacion de igualdad no existe para arrays");
             } else {
                 $$.tipo = T_LOGICO;
                 if ($1.valid == TRUE && $3.valid == TRUE) {
@@ -226,9 +224,9 @@ expresion_relacional
         { $$.tipo = T_ERROR;
         if ($1.tipo != T_ERROR && $3.tipo != T_ERROR) {
             if ($1.tipo != $3.tipo) {
-                yyerror("Tipos no coinciden");
+                yyerror("Tipos no coinciden en operacion relacional");
             } else if ($1.tipo == T_LOGICO) {
-                yyerror("Operacion relacional invalida para booleanos");
+                yyerror("Operacion relacional solo acepta argumentos enteros");
             } else {
                 $$.tipo = T_LOGICO;
                 if ($1.valid == TRUE && $3.valid == TRUE) {
@@ -252,9 +250,9 @@ expresion_aditiva
         { $$.tipo = T_ERROR;
         if ($1.tipo != T_ERROR && $3.tipo != T_ERROR) {
             if ($1.tipo != $3.tipo) {
-                yyerror("Tipos no coinciden");
+                yyerror("Tipos no coinciden en operacion aditiva");
             } else if ($1.tipo != T_ENTERO) {
-                yyerror("Operacion aditiva invalida para no enteros");
+                yyerror("Operacion aditiva solo acepta argumentos enteros");
             } else {
                 $$.tipo = T_ENTERO;
                 if ($1.valid == TRUE && $3.valid == TRUE) {
@@ -274,9 +272,9 @@ expresion_multiplicativa
         { $$.tipo = T_ERROR;
         if ($1.tipo != T_ERROR && $3.tipo != T_ERROR) {
             if ($1.tipo != $3.tipo) {
-                yyerror("Tipos no coinciden");
+                yyerror("Tipos no coinciden en operacion multiplicativa");
             } else if ($1.tipo != T_ENTERO) {
-                yyerror("Operacion multiplicativa invalida para no enteros");
+                yyerror("Operacion multiplicativa solo acepta argumentos enteros");
             } else {
                 $$.tipo = T_ENTERO;
                 if ($1.valid == TRUE && $3.valid == TRUE) {
@@ -311,7 +309,7 @@ expresion_unaria
         if ($2.tipo != T_ERROR) {
             if ($2.tipo == T_ENTERO) {
                 if ($1 == OP_NOT) {
-                    yyerror("Operacion \"!\" invalida en entero");
+                    yyerror("Operacion \"!\" invalida en expresion entera");
                 } else if ($2.valid == TRUE) {
                     $$.tipo = T_ENTERO;
                     if ($1 == OP_MAS) {
@@ -330,7 +328,7 @@ expresion_unaria
                             $$.valor = TRUE;
                     }
                 } else {
-                    yyerror("Operacion invalida en booleano");
+                    yyerror("Operacion entera invalida en expresion logica");
                 }
             }
         } }
@@ -341,7 +339,7 @@ expresion_unaria
         if (simb.tipo == T_ERROR)
             yyerror(E_UNDECLARED);
         else if (simb.tipo == T_ARRAY)
-            yyerror("Acceso a array sin indice");
+            yyerror(E_ARRAY_WO_INDEX);
         else
             $$.tipo = simb.tipo;
         $$.valid = FALSE; }
@@ -356,7 +354,7 @@ expresion_sufija
         if (simb.tipo == T_ERROR)
             yyerror(E_UNDECLARED);
         else if (simb.tipo == T_ARRAY)
-            yyerror("Acceso a array sin indice");
+            yyerror(E_ARRAY_WO_INDEX);
         else
             $$.tipo = simb.tipo; }
     | ID_ CORCHETE1_ expresion CORCHETE2_
@@ -366,7 +364,7 @@ expresion_sufija
         if (simb.tipo == T_ERROR)
             yyerror(E_UNDECLARED);
         else if (simb.tipo != T_ARRAY)
-            yyerror("Esta variable no es un array");
+            yyerror(E_VAR_WITH_INDEX);
         else {
             DIM dim = obtenerInfoArray(simb.ref);
             $$.tipo = dim.telem;
@@ -378,7 +376,7 @@ expresion_sufija
         if (simb.tipo == T_ERROR)
             yyerror(E_UNDECLARED);
         else if (simb.tipo == T_ARRAY)
-            yyerror("Acceso a array sin indice");
+            yyerror(E_ARRAY_WO_INDEX);
         else
             $$.tipo = simb.tipo; }
     | CTE_   { $$.valor = $<cent>1; $$.tipo = T_ENTERO; $$.valid = TRUE; }
@@ -432,6 +430,5 @@ operador_incremento
     : OPINCREMENTO_ { $$ = OP_INC; }
     | OPDECREMENTO_ { $$ = OP_DEC; }
     ;
-
 %%
 

@@ -3,12 +3,12 @@ Requiere `flex`, `bison`, `make`
 
 ## MenosC: espeficicación del lenguaje
 ### Especificación léxica
-* Los identificadores son cadenas de letras (incluyendo `\_`) y dígitos, que comienzan siempre por una letra. Debe distinguirse entre mayúsculas y minúsculas.
+* Los identificadores son cadenas de letras (incluyendo `_`) y dígitos, que comienzan siempre por una letra. Debe distinguirse entre mayúsculas y minúsculas.
 * Las palabras reservadas se deben escribir en minúscula.
 * Todas las constantes numéricas deben considerarse enteras.
-* El signo + (ó -) de las constantes numéricas se tratará como un símbolo léxico independiente.
+* El signo `+` (ó `-`) de las constantes numéricas se tratará como un símbolo léxico independiente.
 * Los espacios en blanco, retornos de línea y tabuladores deben ignorarse.
-* Los comentarios deben ir precedidos por la doble barra (`\/\/`) y terminar con el fin de la línea. Los comentarios no se pueden anidar.
+* Los comentarios deben ir precedidos por la doble barra (`//`) y terminar con el fin de la línea. Los comentarios no se pueden anidar.
 
 ### Especificación sintáctica
 Ver [especificación](Parte1/src/asin.y) y [equivalencia de símbolos](Parte1/src/alex.l)
@@ -30,4 +30,4 @@ Ver [especificación](Parte1/src/asin.y) y [equivalencia de símbolos](Parte1/sr
 * Parte2: analizador semántico
 * Parte3: generador de código intermedio
 
-Nota: Parte2 no funciona con versión de `gcc` superior a 5.
+**Nota**: Parte2 no funciona con versión de `gcc` superior a 5.

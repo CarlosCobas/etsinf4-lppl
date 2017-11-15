@@ -1,7 +1,7 @@
 # Prácticas: Lenguajes de programación y procesamiento de lenguajes
 Requiere `flex`, `bison`, `make`
 
-## MenosC: espeficicación del lenguaje
+## MenosC: especificación del lenguaje
 ### Especificación léxica
 * Los identificadores son cadenas de letras (incluyendo `_`) y dígitos, que comienzan siempre por una letra. Debe distinguirse entre mayúsculas y minúsculas.
 * Las palabras reservadas se deben escribir en minúscula.

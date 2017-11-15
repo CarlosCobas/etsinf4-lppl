@@ -7,7 +7,7 @@
 
 %option yylineno
 
-delimitador     [ \t\n]+
+delimitador     [ \t]+
 comentario      \/\/.*
 letra           [a-zA-Z]
 digito          [0-9]
@@ -16,6 +16,7 @@ identificador   {letra}({letra}|{digito}|_)*
 
 %%
 
+\n				{ if (verbosidad) { ECHO; printf("  %d.- ", yylineno); }}
 {delimitador}   { if (verbosidad) ECHO;    }
 {comentario}    { if (verbosidad) ECHO;    }
 

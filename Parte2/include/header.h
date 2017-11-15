@@ -43,7 +43,7 @@
 #define OP_INC 0
 #define OP_DEC 1
 /************************************************************ Error messages */
-// Variables
+/* Variables */
 #define E_UNDECLARED            "La variable no ha sido declarada"
 #define E_REPEATED_DECLARATION  "La variable no puede ser declarada dos veces"
 #define E_ARRAY_SIZE_INVALID    "La talla del array no es valida"
@@ -52,11 +52,11 @@
 #define E_ARRAY_WO_INDEX        "El array solo puede ser accedido con indices"
 #define E_VAR_WITH_INDEX        "La variable no es un array, no puede ser accedida con indices"
 
-// Estructuras de control y loops
+/* Estructuras de control y loops */
 #define E_IF_LOGICAL            "La expresion del if debe ser logica"
 #define E_WHILE_LOGICAL         "La expresion del while debe ser logica"
 
-// Tipos
+/* Tipos */
 #define E_TYPES_ASIGNACION      "Tipos no coinciden en asignacion a variable"
 #define E_TYPES_LOGICA          "Tipos no coinciden en operacion logica"
 #define E_TYPE_MISMATCH         "Los tipos no coinciden"

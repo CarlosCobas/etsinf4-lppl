@@ -128,7 +128,6 @@ expresion
     : expresion_logica { $$.tipo = $1.tipo; $$.valor = $1.valor; $$.valid = $1.valid; }
     | ID_ operador_asignacion expresion
         { $$.tipo = T_ERROR;
-        // TODO: comprobar
         $$.tipo = T_ERROR;
         if ($3.tipo != T_ERROR) {
             SIMB simb = obtenerTDS($1);

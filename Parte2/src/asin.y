@@ -366,7 +366,10 @@ expresion_sufija
             yyerror(E_VAR_WITH_INDEX);
         else {
             DIM dim = obtenerInfoArray(simb.ref);
-            $$.tipo = dim.telem;
+            if ($3.valid == TRUE && ($3.valor < 0 || $3.valor >= dim.nelem))
+                yyerror(E_ARRAY_INDEX_INVALID);
+            else
+                $$.tipo = dim.telem;
         } }
     | ID_
         { SIMB simb = obtenerTDS($1);

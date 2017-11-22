@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include "libtds.h"
     #include "header.h"
+    #include "libgci.h"
 %}
 
 %union {
@@ -128,7 +129,6 @@ expresion
     : expresion_logica { $$.tipo = $1.tipo; $$.valor = $1.valor; $$.valid = $1.valid; }
     | ID_ operador_asignacion expresion
         { $$.tipo = T_ERROR;
-        $$.tipo = T_ERROR;
         if ($3.tipo != T_ERROR) {
             SIMB simb = obtenerTDS($1);
             if (simb.tipo == T_ERROR) {
@@ -207,9 +207,9 @@ expresion_igualdad
             } else {
                 $$.tipo = T_LOGICO;
                 if ($1.valid == TRUE && $3.valid == TRUE) {
-                    if ($2 == OP_IGUAL)
+                    if ($2 == EIGUAL)
                         $$.valor = $1.valor == $3.valor ? TRUE : FALSE;
-                    else if ($2 == OP_NOTIGUAL)
+                    else if ($2 == EDIST)
                         $$.valor = $1.valor != $3.valor ? TRUE : FALSE;
                     $$.valid = TRUE;
                 } else $$.valid = FALSE;
@@ -229,13 +229,13 @@ expresion_relacional
             } else {
                 $$.tipo = T_LOGICO;
                 if ($1.valid == TRUE && $3.valid == TRUE) {
-                    if ($2 == OP_MAYOR)
+                    if ($2 == EMAY)
                         $$.valor = $1.valor > $3.valor ? TRUE : FALSE;
-                    else if ($2 == OP_MENOR)
+                    else if ($2 == EMEN)
                         $$.valor = $1.valor < $3.valor ? TRUE : FALSE;
-                    else if ($2 == OP_MAYORIG)
+                    else if ($2 == EMAYEQ)
                         $$.valor = $1.valor >= $3.valor ? TRUE : FALSE;
-                    else if ($2 == OP_MENORIG)
+                    else if ($2 == EMENEQ)
                         $$.valor = $1.valor <= $3.valor ? TRUE : FALSE;
                     $$.valid = TRUE;
                 } else $$.valid = FALSE;
@@ -255,9 +255,9 @@ expresion_aditiva
             } else {
                 $$.tipo = T_ENTERO;
                 if ($1.valid == TRUE && $3.valid == TRUE) {
-                    if ($2 == OP_SUMA)
+                    if ($2 == ESUM)
                         $$.valor = $1.valor + $3.valor;
-                    else if ($2 == OP_RESTA)
+                    else if ($2 == EDIF)
                         $$.valor = $1.valor - $3.valor;
                     $$.valid = TRUE;
                 } else $$.valid = FALSE;
@@ -277,16 +277,16 @@ expresion_multiplicativa
             } else {
                 $$.tipo = T_ENTERO;
                 if ($1.valid == TRUE && $3.valid == TRUE) {
-                    if ($2 == OP_MULT)
+                    if ($2 == EMULT)
                         $$.valor = $1.valor * $3.valor;
-                    else if ($2 == OP_DIV) {
+                    else if ($2 == EDIVI) {
                         if ($3.valor == 0) {
                             $$.tipo = T_ERROR;
                             yyerror("Division entre 0");
                         } else {
                             $$.valor = $1.valor / $3.valor;
                         }
-                    } else if ($2 == OP_MOD) {
+                    } else if ($2 == RESTO) {
                         if ($3.valor == 0) {
                             $$.tipo = T_ERROR;
                             yyerror("Modulo entre 0");
@@ -311,9 +311,9 @@ expresion_unaria
                     yyerror("Operacion \"!\" invalida en expresion entera");
                 } else if ($2.valid == TRUE) {
                     $$.tipo = T_ENTERO;
-                    if ($1 == OP_MAS) {
+                    if ($1 == ESUM) {
                         $$.valor = $2.valor;
-                    } else if ($1 == OP_MENOS) {
+                    } else if ($1 == EDIF) {
                         $$.valor = - $2.valor;
                     }
                 }
@@ -384,11 +384,11 @@ expresion_sufija
     ;
 
 operador_asignacion
-    : IGUAL_      { $$ = OP_ASIG;       }
-    | MASIGUAL_   { $$ = OP_ASIG_SUMA;  }
-    | MENOSIGUAL_ { $$ = OP_ASIG_RESTA; }
-    | PORIGUAL_   { $$ = OP_ASIG_MULT;  }
-    | DIVIGUAL_   { $$ = OP_ASIG_DIV;   }
+    : IGUAL_      { $$ = EASIG; }
+    | MASIGUAL_   { $$ = ESUM;  }
+    | MENOSIGUAL_ { $$ = EDIF;  }
+    | PORIGUAL_   { $$ = EMULT; }
+    | DIVIGUAL_   { $$ = EDIVI; }
     ;
 
 operador_logico
@@ -397,37 +397,37 @@ operador_logico
     ;
 
 operador_igualdad
-    : OPIGUAL_    { $$ = OP_IGUAL;    }
-    | OPNOTIGUAL_ { $$ = OP_NOTIGUAL; }
+    : OPIGUAL_    { $$ = EIGUAL; }
+    | OPNOTIGUAL_ { $$ = EDIST;  }
     ;
 
 operador_relacional
-    : COMPMAYOR_   { $$ = OP_MAYOR;   }
-    | COMPMENOR_   { $$ = OP_MENOR;   }
-    | COMPMAYORIG_ { $$ = OP_MAYORIG; }
-    | COMPMENORIG_ { $$ = OP_MENORIG; }
+    : COMPMAYOR_   { $$ = EMAY;   }
+    | COMPMENOR_   { $$ = EMEN;   }
+    | COMPMAYORIG_ { $$ = EMAYEQ; }
+    | COMPMENORIG_ { $$ = EMENEQ; }
     ;
 
 operador_aditivo
-    : OPSUMA_  { $$ = OP_SUMA;  }
-    | OPRESTA_ { $$ = OP_RESTA; }
+    : OPSUMA_  { $$ = ESUM; }
+    | OPRESTA_ { $$ = EDIF; }
     ;
 
 operador_multiplicativo
-    : OPMULT_ { $$ = OP_MULT; }
-    | OPDIV_  { $$ = OP_DIV;  }
-    | OPMOD_  { $$ = OP_MOD;  }
+    : OPMULT_ { $$ = EMULT; }
+    | OPDIV_  { $$ = EDIVI  }
+    | OPMOD_  { $$ = RESTO; }
     ;
 
 operador_unario
-    : OPSUMA_  { $$ = OP_MAS;   }
-    | OPRESTA_ { $$ = OP_MENOS; }
-    | OPNOT_   { $$ = OP_NOT;   }
+    : OPSUMA_  { $$ = ESUM;   }
+    | OPRESTA_ { $$ = EDIF;   }
+    | OPNOT_   { $$ = OP_NOT; }
     ;
 
 operador_incremento
-    : OPINCREMENTO_ { $$ = OP_INC; }
-    | OPDECREMENTO_ { $$ = OP_DEC; }
+    : OPINCREMENTO_ { $$ = ESUM; }
+    | OPDECREMENTO_ { $$ = EDIF; }
     ;
 %%
 

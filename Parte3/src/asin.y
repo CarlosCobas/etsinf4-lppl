@@ -415,7 +415,7 @@ operador_aditivo
 
 operador_multiplicativo
     : OPMULT_ { $$ = EMULT; }
-    | OPDIV_  { $$ = EDIVI  }
+    | OPDIV_  { $$ = EDIVI; }
     | OPMOD_  { $$ = RESTO; }
     ;
 

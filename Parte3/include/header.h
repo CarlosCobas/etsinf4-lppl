@@ -66,6 +66,7 @@ typedef struct exp {
     int valor;
     int tipo;
     int valid;
+    int pos;
 } EXP;
 /************************************* Variables externas definidas en el AL */
 extern FILE *yyin;

@@ -6,4 +6,4 @@
   b = 7; a= 2;
   b+=a; print(b); b-=a; print(b); b*=a; print(b); b/=a; print(b);
   print(a=b=28); print(a); print(b);
-} 
+}

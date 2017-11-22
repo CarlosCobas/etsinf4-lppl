@@ -1,16 +1,16 @@
-// Criba de Eratostenes: calcula los numeros primos > 1 y < 150 
+// Criba de Eratostenes: calcula los numeros primos > 1 y < 150
 {
   bool a[150];
   int max;     // Numero maximo para buscar
-  int n;       // Siguiente numero primo  
+  int n;       // Siguiente numero primo
   int i;
   bool OK;
 
-  read(max); 
+  read(max);
   // Comprobacion de que es un numero admisible
   OK = false;
   while (! OK) {
-    if ((max > 1) && (max < 150)) OK = true; 
+    if ((max > 1) && (max < 150)) OK = true;
     else read(max);
   }
   // Inicializacion del vector de posible primos

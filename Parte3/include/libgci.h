@@ -38,7 +38,7 @@ int si;                       /* Desplazamiento en el Segmento de Codigo     */
 
 /*****************************************************************************/
 typedef struct tipo_arg /****** Estructura para los argumentos del codigo 3D */
-{              
+{
   int tipo;        /* Tipo del argumento: entero, posicion, etiqueta o nulo  */
   int val;         /* valor del argumento: entero, posicion, etiqueta o nulo */
 }TIPO_ARG;
@@ -47,13 +47,13 @@ typedef struct tipo_arg /****** Estructura para los argumentos del codigo 3D */
 TIPO_ARG crArgNul () ;
 /* Crea el argumento de una instruccion tres direcciones de tipo nulo.       */
 TIPO_ARG crArgEnt (int valor) ;
-/* Crea el argumento de una instruccion tres direcciones de tipo entero 
+/* Crea el argumento de una instruccion tres direcciones de tipo entero
    con la informacion de la constante entera dada en "valor".                */
 TIPO_ARG crArgEtq (int valor) ;
-/*  Crea el argumento de una instruccion tres direcciones de tipo etiqueta 
+/*  Crea el argumento de una instruccion tres direcciones de tipo etiqueta
     con la informacion de la direccion dada en "valor".                      */
 TIPO_ARG crArgPos (int valor) ;
-/*  Crea el argumento de una instruccion tres direcciones de tipo posicion 
+/*  Crea el argumento de una instruccion tres direcciones de tipo posicion
     con la informacion del desplazamiento relativo dada en "valor".          */
 
 /******************************** Funciones para la manipulacion de las LANS */
@@ -64,22 +64,22 @@ int fusionaLans (int x, int y);
 /* Fusiona dos listas de argumentos no satisfechos cuyas referencias
    son "x" e "y" y devuelve la referencia de la lista fusionada.             */
 void completaLans (int x, TIPO_ARG arg);
-/* Completa con el argumento "arg" el campo "res" de todas las instrucciones 
+/* Completa con el argumento "arg" el campo "res" de todas las instrucciones
    incompletas de la lista "x".                                              */
 
 void emite (int cop, TIPO_ARG arg1, TIPO_ARG arg2, TIPO_ARG res);
-/* Crea una instruccion tres direcciones con el codigo de operacion "cod" y 
-   los argumentos "arg1", "arg2" y "res", y la pone en la siguiente posicion 
-   libre (indicada por "si") del Segmento de Codigo. A continuacion, 
+/* Crea una instruccion tres direcciones con el codigo de operacion "cod" y
+   los argumentos "arg1", "arg2" y "res", y la pone en la siguiente posicion
+   libre (indicada por "si") del Segmento de Codigo. A continuacion,
    incrementa "si".                                                          */
 
 int creaVarTemp ();
-/*  Crea una variable temporal de tipo simple (TALLA_TIPO_SIMPLE = 1), en el 
-    segmento de variables (indicado por "dvar") y devuelve su desplazamiento 
+/*  Crea una variable temporal de tipo simple (TALLA_TIPO_SIMPLE = 1), en el
+    segmento de variables (indicado por "dvar") y devuelve su desplazamiento
     relativo. A continuacón, incrementa "dvar".                              */
 
 void volcarCodigo(char *nom) ;
-/* Vuelca (en modo texto) el codigo generado en un fichero cuyo nombre es el 
+/* Vuelca (en modo texto) el codigo generado en un fichero cuyo nombre es el
    del fichero de entrada con la extension ".c3d".                           */
 
 #endif  /* _LIBGCI_H */

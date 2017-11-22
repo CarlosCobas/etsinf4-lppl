@@ -1,4 +1,4 @@
-// Calcula el maximo comun divisor de dos numeros naturales > 0. 
+// Calcula el maximo comun divisor de dos numeros naturales > 0.
 // Por ejemplo, la salida esperada para 42 y 56 es 14.
 {
   int x; int y;

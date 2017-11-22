@@ -35,13 +35,23 @@
 #define E_TYPES_LOGICA          "Tipos no coinciden en operacion logica"
 #define E_TYPE_MISMATCH         "Los tipos no coinciden"
 
-/************************************************ Struct para las expresions */
+/******************************************** Struct para analisis semantico */
 typedef struct exp {
     int valor;
     int tipo;
     int valid;
     int pos;
 } EXP;
+
+typedef struct ifelse_instr {
+    int etqElse;
+    int etqEnd;
+} IF_ELSE_INSTR;
+
+typedef struct while_instr {
+    int etqBegin;
+    int etqEnd;
+} WHILE_INSTR;
 /************************************* Variables externas definidas en el AL */
 extern FILE *yyin;
 extern int   yylineno;

@@ -157,7 +157,8 @@ expresion
     : expresion_logica { $$.tipo = $1.tipo; $$.valor = $1.valor; $$.valid = $1.valid; $$.pos = $1.pos; }
     | ID_ operador_asignacion expresion
         { $$.tipo = T_ERROR;
-        SIMB simb = obtenerTDS($1);
+        SIMB simb;
+		simb = obtenerTDS($1);
         if ($3.tipo != T_ERROR) {
             if (simb.tipo == T_ERROR) {
                 yyerror(E_UNDECLARED);
@@ -171,11 +172,16 @@ expresion
             }
         }
 
-        $$.pos = $3.pos;
-        emite(EASIG, crArgPos($3.pos), crArgNul(), crArgPos(simb.desp)); }
+        $$.pos = creaVarTemp(); 
+        emite($2, crArgPos(simb.desp), crArgPos($3.pos), crArgPos($$.pos)); 
+		emite(EASIG, crArgPos($$.pos),crArgNul(),crArgPos(simb.desp));
+
+
+		}
     | ID_ CORCHETE1_ expresion CORCHETE2_ operador_asignacion expresion
         { $$.tipo = T_ERROR;
-        SIMB simb = obtenerTDS($1);
+        SIMB simb;
+		simb = obtenerTDS($1);
         if ($3.tipo != T_ERROR && $6.tipo != T_ERROR) {
             if (simb.tipo == T_ERROR) {
                 yyerror(E_UNDECLARED);
@@ -196,8 +202,9 @@ expresion
             }
         }
 
-        $$.pos = $6.pos;
-        emite(EVA, crArgPos(simb.desp), crArgPos($3.pos), crArgPos($6.pos)); }
+		$$.pos = creaVarTemp(); 
+		emite(EASIG, crArgPos(simb.desp), crArgPos($3.pos), crArgPos($$.pos)); 
+        emite(EVA, crArgPos(simb.desp), crArgPos($3.pos), crArgPos($$.pos)); }
     ;
 
 expresion_logica
@@ -229,7 +236,8 @@ expresion_logica
         }
 
         $$.pos = creaVarTemp();
-        int overrideValue = $2 == OP_AND ? FALSE : TRUE;
+        int overrideValue;
+ 		overrideValue= $2 == OP_AND ? FALSE : TRUE;
         emite(EASIG, crArgPos($3.pos), crArgNul(), crArgPos($$.pos));
         emite(EIGUAL, crArgPos($1.pos), crArgEnt(overrideValue), crArgEtq(si + 2));
         emite(EASIG, crArgEnt(overrideValue), crArgNul(), crArgPos($$.pos)); }
@@ -406,7 +414,7 @@ expresion_unaria
         $$.valid = FALSE;
 
         $$.pos = creaVarTemp();
-        // Primero se incrementa/decrementa y luego se copia a $$.pos
+        /* Primero se incrementa/decrementa y luego se copia a $$.pos */
         emite($1,    crArgPos(simb.desp), crArgEnt(1), crArgPos(simb.desp));
         emite(EASIG, crArgPos(simb.desp), crArgNul(),  crArgPos($$.pos));
         }
@@ -426,7 +434,7 @@ expresion_sufija
             $$.tipo = simb.tipo;
 
         $$.pos = creaVarTemp();
-        // Primero se copia el valor a $$.pos y luego se incrementa
+        /* Primero se copia el valor a $$.pos y luego se incrementa */
         emite(EASIG, crArgPos($$.pos), crArgNul(), crArgPos($$.pos));
         emite($2, crArgPos(simb.desp), crArgEnt(1), crArgPos(simb.desp)); }
     | ID_ CORCHETE1_ expresion CORCHETE2_

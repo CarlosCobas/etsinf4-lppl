@@ -39,6 +39,7 @@
 
 programa
     : LLAVE1_ secuencia_sentencias LLAVE2_
+    { emite(FIN, crArgNul(), crArgNul(), crArgNul()); }
     ;
 
 secuencia_sentencias

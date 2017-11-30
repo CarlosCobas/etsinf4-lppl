@@ -204,9 +204,9 @@ expresion
         $$.pos = creaVarTemp();
         if ($5 != EASIG) {
             emite(EAV, crArgPos(simb.desp), crArgPos($3.pos), crArgPos($$.pos));
-            emite($5, crArgPos(), crArgPos($6.pos), crArgPos($$.pos));
+            emite($5, crArgPos($$.pos), crArgPos($6.pos), crArgPos($$.pos));
         } else {
-            emite($5, crArgPos($6.pos) crArgNul(), crArgPos($$.pos));
+            emite($5, crArgPos($6.pos), crArgNul(), crArgPos($$.pos));
         }
         emite(EVA, crArgPos(simb.desp), crArgPos($3.pos), crArgPos($$.pos)); }
     ;

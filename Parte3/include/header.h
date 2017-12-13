@@ -42,16 +42,6 @@ typedef struct exp {
     int valid;
     int pos;
 } EXP;
-
-typedef struct ifelse_instr {
-    int etqElse;
-    int etqEnd;
-} IF_ELSE_INSTR;
-
-typedef struct while_instr {
-    int etqBegin;
-    int etqEnd;
-} WHILE_INSTR;
 /************************************* Variables externas definidas en el AL */
 extern FILE *yyin;
 extern int   yylineno;

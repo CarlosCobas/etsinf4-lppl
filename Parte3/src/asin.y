@@ -9,8 +9,6 @@
     char* ident;
     int cent;
     EXP exp;
-    IF_ELSE_INSTR ifelse_instr;
-    WHILE_INSTR while_instr;
 }
 
 
@@ -31,9 +29,6 @@
 
 %type <exp> expresion expresion_logica expresion_igualdad expresion_relacional
 %type <exp> expresion_aditiva expresion_multiplicativa expresion_unaria expresion_sufija
-
-%type <ifelse_instr> instruccion_seleccion resto_if
-%type <while_instr> instruccion_iteracion
 
 %%
 
@@ -115,43 +110,45 @@ instruccion_entrada_salida
 instruccion_seleccion
     : IF_ PARENTESIS1_ expresion PARENTESIS2_
         { if ($3.tipo != T_ERROR && $3.tipo != T_LOGICO) yyerror(E_IF_LOGICAL);
-        $<ifelse_instr>$.etqElse = creaLans(si);
-        emite(EIGUAL, crArgPos($3.pos), crArgEnt(FALSE), crArgEtq($<ifelse_instr>$.etqElse)); }
-        instruccion
-        { $<ifelse_instr>$.etqEnd = creaLans(si);
-        emite(GOTOS, crArgNul(), crArgNul(), crArgEtq($<ifelse_instr>$.etqEnd));
-        completaLans($<ifelse_instr>$.etqElse, crArgEtq(si)); }
-        resto_if { completaLans($$.etqEnd, crArgEtq(si)); }
+        $<cent>$ = creaLans(si);
+        emite(EIGUAL, crArgPos($3.pos), crArgEnt(FALSE), crArgEtq($<cent>$)); }
+      instruccion
+        { $<cent>$ = creaLans(si);
+        emite(GOTOS, crArgNul(), crArgNul(), crArgEtq($<cent>$));
+        completaLans($<cent>5, crArgEtq(si)); }
+      resto_if
+        { completaLans($<cent>7, crArgEtq(si)); }
     ;
 
 resto_if
     : ELSEIF_ PARENTESIS1_ expresion PARENTESIS2_
         { if ($3.tipo != T_ERROR && $3.tipo != T_LOGICO) yyerror(E_IF_LOGICAL);
-        $<ifelse_instr>$.etqElse = creaLans(si);
-        emite(EIGUAL, crArgPos($3.pos), crArgEnt(FALSE), crArgEtq($<ifelse_instr>$.etqElse)); }
-        instruccion
-        { $<ifelse_instr>$.etqEnd = creaLans(si);
-        emite(GOTOS, crArgNul(), crArgNul(), crArgEtq($<ifelse_instr>$.etqEnd));
-        completaLans($<ifelse_instr>$.etqElse, crArgEtq(si)); }
-        resto_if { completaLans($<ifelse_instr>$.etqEnd, crArgEtq(si)); }
-    | ELSE_ instruccion { $$.etqEnd = 0; $$.etqElse = 0; }
+        $<cent>$ = creaLans(si);
+        emite(EIGUAL, crArgPos($3.pos), crArgEnt(FALSE), crArgEtq($<cent>$)); }
+      instruccion
+        { $<cent>$ = creaLans(si);
+        emite(GOTOS, crArgNul(), crArgNul(), crArgEtq($<cent>$));
+        completaLans($<cent>5, crArgEtq(si)); }
+      resto_if
+        { completaLans($<cent>7, crArgEtq(si)); }
+    | ELSE_ instruccion
     ;
 
 instruccion_iteracion
     : WHILE_ PARENTESIS1_ expresion PARENTESIS2_
         { if ($3.tipo != T_ERROR && $3.tipo != T_LOGICO)
             yyerror(E_WHILE_LOGICAL);
-        $<while_instr>$.etqBegin = si;
-        $<while_instr>$.etqEnd = creaLans(si);
-        emite(EIGUAL, crArgPos($3.pos), crArgEnt(FALSE), crArgEtq($<while_instr>$.etqEnd)); }
-        instruccion
-        { emite(GOTOS, crArgNul(), crArgNul(), crArgEtq($$.etqBegin));
-        completaLans($$.etqEnd, crArgEtq(si)); }
-    | DO_ { $<while_instr>$.etqBegin = si; }
+        $<cent>$ = si; }
+        { $<cent>$ = creaLans(si);
+        emite(EIGUAL, crArgPos($3.pos), crArgEnt(FALSE), crArgEtq($<cent>$)); }
+      instruccion
+        { emite(GOTOS, crArgNul(), crArgNul(), crArgEtq($<cent>5));
+        completaLans($<cent>6, crArgEtq(si)); }
+    | DO_ { $<cent>$ = si; }
         instruccion WHILE_ PARENTESIS1_ expresion PARENTESIS2_
-        { if ($<exp>5.tipo != T_ERROR && $<exp>5.tipo != T_LOGICO)
+        { if ($6.tipo != T_ERROR && $6.tipo != T_LOGICO)
             yyerror(E_WHILE_LOGICAL);
-        emite(EIGUAL, crArgPos($<exp>5.pos), crArgEnt(TRUE), crArgEtq($$.etqBegin)); }
+        emite(EIGUAL, crArgPos($6.pos), crArgEnt(TRUE), crArgEtq($<cent>2)); }
     ;
 
 expresion

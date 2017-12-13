@@ -1,6 +1,6 @@
 /*****************************************************************************/
-/*  Programa principal y tratamiento de errores para MenosC.17               */
-/*                       Jose Miguel Benedi, 2016-2017 <jbenedi@dsic.upv.es> */
+/*  Programa principal y tratamiento de errores para MenosC.18               */
+/*                       Jose Miguel Benedi, 2017-2018 <jbenedi@dsic.upv.es> */
 /*****************************************************************************/
 #include <stdio.h>
 #include <string.h>
@@ -35,6 +35,8 @@ int main (int argc, char **argv)
       yyparse ();
       if (numErrores == 0) volcarCodigo(nom_fich);
       else fprintf(stdout,"\nNumero de errores:      %d\n", numErrores);
+      if (verTDS == TRUE)
+        mostrarTDS();
     }
   }
   else fprintf (stderr, "Uso: cmc [-v] [-t] fichero\n");

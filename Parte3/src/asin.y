@@ -239,7 +239,7 @@ expresion_logica
         $$.pos = creaVarTemp();
         int overrideValue = $2 == OP_AND ? FALSE : TRUE;
         emite(EASIG, crArgPos($3.pos), crArgNul(), crArgPos($$.pos));
-        emite(EIGUAL, crArgPos($1.pos), crArgEnt(overrideValue), crArgEtq(si + 2));
+        emite(EDIST, crArgPos($1.pos), crArgEnt(overrideValue), crArgEtq(si + 2));
         emite(EASIG, crArgEnt(overrideValue), crArgNul(), crArgPos($$.pos)); }
     ;
 

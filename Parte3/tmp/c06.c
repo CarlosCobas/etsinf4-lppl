@@ -27,7 +27,7 @@
     i = n + 1;
     while (! a[i] && (i <= max)) {i++;}
     // Control del fin (n * n > max)
-    if ((i * i) < max) n = i;
+    if ((i * i) <= max) n = i;
     else OK = true;
   }
 

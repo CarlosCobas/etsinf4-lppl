@@ -135,14 +135,15 @@ resto_if
     ;
 
 instruccion_iteracion
-    : WHILE_ PARENTESIS1_ expresion PARENTESIS2_
-        { if ($3.tipo != T_ERROR && $3.tipo != T_LOGICO)
+    : WHILE_
+        { $<cent>$ = si; }
+      PARENTESIS1_ expresion PARENTESIS2_
+        { if ($4.tipo != T_ERROR && $4.tipo != T_LOGICO)
             yyerror(E_WHILE_LOGICAL);
-        $<cent>$ = si; }
-        { $<cent>$ = creaLans(si);
-        emite(EIGUAL, crArgPos($3.pos), crArgEnt(FALSE), crArgEtq($<cent>$)); }
+        $<cent>$ = creaLans(si);
+        emite(EIGUAL, crArgPos($4.pos), crArgEnt(FALSE), crArgEtq($<cent>$)); }
       instruccion
-        { emite(GOTOS, crArgNul(), crArgNul(), crArgEtq($<cent>5));
+        { emite(GOTOS, crArgNul(), crArgNul(), crArgEtq($<cent>2));
         completaLans($<cent>6, crArgEtq(si)); }
     | DO_ { $<cent>$ = si; }
         instruccion WHILE_ PARENTESIS1_ expresion PARENTESIS2_

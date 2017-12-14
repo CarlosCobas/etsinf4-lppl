@@ -435,7 +435,7 @@ expresion_sufija
 
         $$.pos = creaVarTemp();
         /* Primero se copia el valor a $$.pos y luego se incrementa */
-        emite(EASIG, crArgPos($$.pos), crArgNul(), crArgPos($$.pos));
+        emite(EASIG, crArgPos(simb.desp), crArgNul(), crArgPos($$.pos));
         emite($2, crArgPos(simb.desp), crArgEnt(1), crArgPos(simb.desp)); }
     | ID_ CORCHETE1_ expresion CORCHETE2_
         { SIMB simb = obtenerTDS($1);

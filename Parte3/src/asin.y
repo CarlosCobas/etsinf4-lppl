@@ -278,7 +278,7 @@ expresion_relacional
         if ($1.tipo != T_ERROR && $3.tipo != T_ERROR) {
             if ($1.tipo != $3.tipo) {
                 yyerror("Tipos no coinciden en operacion relacional");
-            } else if ($1.tipo == T_LOGICO) {
+            } else if ($1.tipo != T_ENTERO) {
                 yyerror("Operacion relacional solo acepta argumentos enteros");
             } else {
                 $$.tipo = T_LOGICO;

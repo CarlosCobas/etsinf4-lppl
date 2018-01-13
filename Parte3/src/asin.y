@@ -402,7 +402,20 @@ expresion_unaria
             emite(EDIF, crArgEnt(1), crArgPos($2.pos), crArgPos($$.pos));
         } else {
             emite($1  , crArgEnt(0), crArgPos($2.pos), crArgPos($$.pos));
-        } }
+        }
+        /*
+        Tambien se puede cambiar la suma por una asignacion y la resta por ESIG, (cambio de signo) con lo que quedaria:
+            } else if ($1 == ESUM) {
+                emite(EASIG, crArgPos($2.pos), crArgNul(), crArgPos($$.pos));
+            } else {
+                emite(ESIG, crArgPos($2.pos), crArgNul(), crArgPos($$.pos));
+            }
+        Si se cambiara operador_unario a EASIG la suma y ESIG la resta, se puede simplificar a:
+            } else {
+                emite($2, crArgPos($2.pos), crArgNul(), crArgPos($$.pos));
+            }
+        */
+        }
     | operador_incremento ID_
         { SIMB simb = obtenerTDS($2);
         $$.tipo = T_ERROR;

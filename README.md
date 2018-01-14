@@ -30,4 +30,4 @@ Ver [especificación](Parte1/src/asin.y) y [equivalencia de símbolos](Parte1/sr
 * Parte2: analizador semántico
 * Parte3: generador de código intermedio
 
-**Nota**: Parte2 no funciona con versión de `gcc` superior a 5.
+**Nota**: Las partes 2 y 3 no funcionan con versión de `gcc` superior a 5.

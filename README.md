@@ -1,5 +1,5 @@
 # Prácticas: Lenguajes de programación y procesamiento de lenguajes
-Requiere `flex`, `bison`, `make`
+Requiere `flex`, `bison`, `make` y `gcc`
 
 ## MenosC: especificación del lenguaje
 ### Especificación léxica
